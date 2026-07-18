@@ -1,6 +1,7 @@
-<html type="text/plain">
+<html style="background:black;color:white">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/ffmpeg/0.12.15/umd/ffmpeg.min.js"></script>
-
+  <p></p>
+  
   <script>
     (async () => {
       const { FFmpeg } = FFmpegWASM;
@@ -42,7 +43,7 @@
         "url": url
       }
       
-      document.documentElement.innerHTML = JSON.stringify(res);
+      document.querySelector("p").innerText = JSON.stringify(res);
     });
   </script>
 </html>

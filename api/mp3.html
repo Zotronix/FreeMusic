@@ -1,0 +1,48 @@
+<html type="text/plain">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ffmpeg/0.12.15/umd/ffmpeg.min.js"></script>
+
+  <script>
+    (async () => {
+      const { FFmpeg } = FFmpegWASM;
+
+      const ffmpeg = new FFmpeg();
+  
+      await ffmpeg.load({
+          coreURL: "https://unpkg.com/@ffmpeg/core@0.12.10/dist/umd/ffmpeg-core.js",
+          wasmURL: "https://unpkg.com/@ffmpeg/core@0.12.10/dist/umd/ffmpeg-core.wasm"
+      });
+
+      const urlParams = new URLSearchParams(window.location.search);
+      let file = btoa(urLParams.get("file"));
+      
+      const data = new Uint8Array(await file.arrayBuffer());
+  
+      await ffmpeg.writeFile("input.aac", data);
+  
+      await ffmpeg.exec([
+          "-i",
+          "input.aac",
+          "-codec:a",
+          "libmp3lame",
+          "-q:a",
+          "2",
+          "output.mp3"
+      ]);
+  
+      const mp3 = await ffmpeg.readFile("output.mp3");
+  
+      const blob = new Blob([mp3], {
+          type: "audio/mpeg"
+      });
+  
+      const url = URL.createObjectURL(blob);
+
+      let res = {
+        "response": url ? 200 : 404,
+        "url": url
+      }
+      
+      document.documentElement.innerHTML = JSON.stringify(res);
+    });
+  </script>
+</html>

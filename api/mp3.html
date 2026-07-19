@@ -55,7 +55,9 @@
         "url": url
       }
       
-      document.querySelector("p").innerText = JSON.stringify(res);
+      document.open();
+      document.write(JSON.stringify(res));
+      document.close();
     });
   </script>
 </html>

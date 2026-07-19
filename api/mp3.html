@@ -13,8 +13,20 @@
           wasmURL: "https://unpkg.com/@ffmpeg/core@0.12.10/dist/umd/ffmpeg-core.wasm"
       });
 
+      function base64ToBlob(base64String, mimeType = 'audio/mp3') {
+        const byteCharacters = atob(base64String); 
+        const byteNumbers = new Array(byteCharacters.length);
+        
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        
+        const byteArray = new Uint8Array(byteNumbers);
+        return new Blob([byteArray], { type: mimeType });
+      }
+      
       const urlParams = new URLSearchParams(window.location.search);
-      let file = btoa(urLParams.get("file"));
+      let file = base64ToBlob(urLParams.get("file"));
       
       const data = new Uint8Array(await file.arrayBuffer());
   
